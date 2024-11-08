@@ -1,211 +1,55 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Model Page</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      overflow-x: hidden;
-    }
-
-    #three-canvas {
-      width: 100vw;
-      height: 100vh;
-      z-index: 1000; /* Ustawienie z-index na 0, aby nie nakładał się na inne elementy */
-    }
-
-    .white-section {
-      width: 100vw;
-      background-color: white;
-      z-index: 1;
-      padding-top: 100px;
-    }
-
-    .campaign-list {
-      width: 95%;
-      margin-left: 2.5%;
-    }
-
-    .campaign-list div {
-      margin-bottom: 20px;
-      border-bottom: 2px solid black;
-      opacity: 0; /* Początkowa przezroczystość dla animacji */
-      transform: translateY(50px); /* Początkowa pozycja dla animacji */
-    }
-
-    .campaign-list a {
-      display: block;
-      font-size: 70px;
-      text-align: left;
-      color: black;
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      letter-spacing: -3px;
-      padding: 10px 0;
-      transition: color 0.2s ease; /* Dodanie płynnego przejścia dla efektu hover */
-    }
-
-    .campaign-list a:hover {
-      color: grey;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(255, 255, 255, 1); /* Lekko przezroczyste tło */
-      z-index: 10000;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .popup-content {
-      max-width: 80%;
-      margin: auto;
-      position: relative;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .popup-title {
-      font-size: 50px;
-      margin-bottom: 20px;
-    }
-
-    .popup-description {
-      font-size: 24px;
-    }
-
-    .close-popup {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      .campaign-list a {
-        font-size: 50px;
-        letter-spacing: -3px;
-      }
-
-      .popup-title {
-        font-size: 30px;
-      }
-
-      .popup-description {
-        font-size: 18px;
-      }
-    }
-  </style>
-  
-  <!-- Dodanie GSAP i ScrollTrigger przez CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-MqZ/xfp85iE3lJj0BHZxgG6OeLgXnYcU7bGoQmOVoeEvQxBaXyRxI7A+8l+Q+/wTR1bHIoF8SwUe9kI/mhE4kQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha512-7Q4FJdT6IjwU6mGBDQhgbNJMWu0rOIMSE1Lx22FZ6pnXg9pmpTnIY4m2rLUYNef8XqwBrj78dQ+kE/4iZfGcOw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script type="module" crossorigin src="/cukier/assets/index-dlQKYC7S.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebXR AR Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
+    <script>
+        // Zainicjuj scenę, kamerę i renderer
+        let scene, camera, renderer;
 
-  <div id="three-canvas"></div>
-  
-  <div class="white-section">
-    <div class="campaign-list">
-      <div><a href="#" data-title="Odmrozić Królową" data-description="Kampania promująca kawowy abonament 'Kawonament' dla Żabki, z naciskiem na poranne rytuały. Kampania zainspirowana corocznymi występami Maryli Rodowicz, symbolizującymi 'odmrożenie' energii i gotowość do działania.">Odmrozić Królową</a></div>
-      <div><a href="#" data-title="Kawonament" data-description="Abonament kawowy w Żabce, promowany jako sposób na codzienne ożywienie. Wykorzystano elementy kampanii digitalowej oraz influencerów, by przyciągnąć uwagę klientów do usługi kawowej za 1 zł dziennie.">Kawonament</a></div>
-      <div><a href="#" data-title="Jazda z Kawkami" data-description="Kampania, która przedstawia poranną kawę Żabki jako sposób na energetyczne rozpoczęcie dnia. Powstał specjalny quest w aplikacji Żappka, a kampania była wspierana przez rozpoznawalny utwór DJ Hazel.">Jazda z Kawkami</a></div>
-      <div><a href="#" data-title="You Can, But You Don’t Have To" data-description="Kreacja, która promuje markę Hardmade wśród młodych dorosłych. Opiera się na idei wolności i robienia tego, co naprawdę się chce, w harmonii z sobą.">You Can, But You Don’t Have To</a></div>
-      <div><a href="#" data-title="Hardmade 0,0%" data-description="Kampania dla Hardmade, promująca wariant bezalkoholowy oraz koncepcję swobodnego wyboru - pijesz alkohol, jeśli chcesz, a jeśli nie, wybierasz 0%.">Hardmade 0,0%</a></div>
-      <div><a href="#" data-title="Antybaton Choco" data-description="Kampania promująca przekąskę Antybaton, prezentując ją jako zdrową, owocową alternatywę dla tradycyjnych słodyczy. Komunikacja opierała się na idei połączenia przyjemności z brakiem poczucia winy.">Antybaton Choco</a></div>
-      <div><a href="#" data-title="Jaka Parówa Wariacie?!" data-description="Kampania promująca hot-dogi Żabki wśród młodych odbiorców. Skorzystano z żartobliwego podejścia i popularnego mema, aby wyróżnić się w okresie powrotu do szkoły.">Jaka Parówa Wariacie?!</a></div>
-      <div><a href="#" data-title="Okres Wypada" data-description="Kampania mająca na celu przełamanie tabu menstruacyjnego w Polsce. Przedstawia menstruację jako naturalny proces i zachęca do rozmowy na ten temat.">Okres Wypada</a></div>
-      <div><a href="#" data-title="Burżujsko Nadziana" data-description="Digitalowa kampania dla Wedla, promująca nową czekoladę nadziewaną jako produkt o luksusowym smaku, dostępny dla każdego.">Burżujsko Nadziana</a></div>
-      <div><a href="#" data-title="Sukcesiliana" data-description="Kampania promująca pizzę Kizo w Żabce. Skierowana na budowanie wizerunku marki jako symbolu sukcesu, z naciskiem na jakość składników i autentyczność.">Sukcesiliana</a></div>
-      <div><a href="#" data-title="ZEW Przygody" data-description="Kampania mająca na celu rozwój świadomości i sprzedaży kosmetyków ZEW dla mężczyzn. Produkty prezentowane są jako idealne dla osób prowadzących aktywny tryb życia.">ZEW Przygody</a></div>
-      <div><a href="#" data-title="Space Has No Boundaries" data-description="Kampania promująca nowe przestrzenie magazynowe Panattoni poprzez abstrakcyjne, futurystyczne podejście do pojęcia przestrzeni.">Space Has No Boundaries</a></div>
-      <div><a href="#" data-title="Keep Your Mind On" data-description="Kampania wprowadzająca napój Brainer na polski rynek, skierowana do osób potrzebujących wsparcia w utrzymaniu koncentracji.">Keep Your Mind On</a></div>
-      <div><a href="#" data-title="#Earthchangers" data-description="Kampania ekologiczna promująca bawełniane chusteczki zamiast plastikowych alternatyw. Skierowana na edukację i budowanie świadomości w kwestii zrównoważonych materiałów.">#Earthchangers</a></div>
-      <div><a href="#" data-title="Effortless Specialty" data-description="Kampania marki HAYB, promująca kawę specialty jako dostępny i wygodny wybór, bez potrzeby posiadania specjalistycznej wiedzy.">Effortless Specialty</a></div>
-      <div><a href="#" data-title="Brand Concept (Asahi)" data-description="Koncepcja nowej marki napoju dla Asahi, skierowana do osób nielubiących piwa. Marka charakteryzuje się autentycznością i odświeżającym podejściem, ma być modnym dodatkiem.">Brand Concept (Asahi)</a></div>
-      <div><a href="#" data-title="Tymbark on TikTok" data-description="Kampania na TikToku, której celem jest przedstawienie Tymbarku jako marki bliskiej młodym. Wprowadzono postać TymbarkOli, która uosabia cechy związane z byciem na czasie.">Tymbark on TikTok</a></div>
-      <div><a href="#" data-title="Wielkie Badanie Wzroku" data-description="Kampania edukacyjna promująca profilaktykę zdrowia oczu wśród młodzieży. Influencerzy łączyli edukację z humorem, by zachęcić do badań wzroku.">Wielkie Badanie Wzroku (Vision Express)</a></div>
-      <div><a href="#" data-title="RAY-BAN Reverse" data-description="Kampania promująca nowy model okularów Ray-Ban, skierowana do młodej grupy docelowej, podkreślająca buntowniczy charakter produktu.">RAY-BAN Reverse</a></div>
-      <div><a href="#" data-title="Transitions® Lenses" data-description="Kampania na rzecz soczewek Transitions, promująca ich funkcjonalność w sposób przystępny i angażujący dla konsumentów noszących okulary.">Transitions® Lenses</a></div>
-      <div><a href="#" data-title="Black Week" data-description="Kampania na Black Week dla Vision Express, łącząca różnorodne oferty i zasięg na różnych platformach cyfrowych.">Black Week</a></div>
-      <div><a href="#" data-title="Instagram for Pringles Poland" data-description="Kampania na Instagramie, która miała na celu rozbudowę społeczności Pringles i wykorzystanie sportów oraz gier jako kontekstu promocyjnego.">Instagram for Pringles Poland</a></div>
-      <div><a href="#" data-title="Berlinki TikTok Launch" data-description="Kampania TikTok dla Berlinek z postacią Gwiazdy, która stara się zostać znaną TikTokerką. Kampania miała na celu dostarczenie rozrywki i przyciągnięcie młodych użytkowników.">Berlinki TikTok Launch</a></div>
-    </div>
-  </div>
+        function init() {
+            // Tworzymy renderer obsługujący WebXR
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.xr.enabled = true; // Włącz obsługę WebXR
+            document.body.appendChild(renderer.domElement);
 
-  <div id="popup" class="popup">
-    <div class="close-popup" id="close-popup">&times;</div>
-    <div class="popup-content">
-      <div class="popup-title" id="popup-title"></div>
-      <div class="popup-description" id="popup-description"></div>
-    </div>
-  </div>
+            // Tworzymy scenę
+            scene = new THREE.Scene();
 
-  <!-- Załaduj plik animation.js jako moduł -->
+            // Tworzymy kamerę perspektywiczną
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+            scene.add(camera);
 
-  <!-- Skrypt obsługujący popupy oraz animacje GSAP -->
-  <script>
-    // Obsługa popupów
-    document.querySelectorAll('.campaign-list a').forEach(link => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const title = link.getAttribute('data-title');
-        const description = link.getAttribute('data-description');
-        openPopup(title, description);
-      });
-    });
+            // Dodajemy prosty obiekt (kostka)
+            const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // 10x10x10 cm
+            const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set(0, 0, -0.5); // Ustawienie kostki pół metra przed kamerą
+            scene.add(cube);
 
-    document.getElementById('close-popup').addEventListener('click', closePopup);
+            // Dodajemy oświetlenie
+            const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+            scene.add(light);
 
-    function openPopup(title, description) {
-      document.getElementById('popup-title').textContent = title;
-      document.getElementById('popup-description').textContent = description;
-      document.getElementById('popup').style.display = 'flex';
-    }
+            // Inicjujemy sesję AR
+            document.body.appendChild(ARButton.createButton(renderer));
 
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-    }
+            // Rozpoczynamy animację
+            renderer.setAnimationLoop(() => {
+                renderer.render(scene, camera);
+            });
+        }
 
-    // Zamknięcie popupu po kliknięciu poza jego zawartością
-    window.addEventListener('click', (event) => {
-      const popup = document.getElementById('popup');
-      if (event.target === popup) {
-        closePopup();
-      }
-    });
-
-    // Inicjalizacja animacji GSAP po załadowaniu treści DOM
-    document.addEventListener('DOMContentLoaded', () => {
-      // Rejestracja pluginu ScrollTrigger
-      gsap.registerPlugin(ScrollTrigger);
-
-      // Animacja dla każdego div w campaign-list
-      gsap.utils.toArray('.campaign-list div').forEach((div) => {
-        gsap.to(div, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: div,
-            start: 'top 80%', // Animacja rozpoczyna się, gdy górna część div osiągnie 80% wysokości viewportu
-            toggleActions: 'play none none none',
-          }
-        });
-      });
-    });
-  </script>
+        // Inicjujemy scenę po załadowaniu strony
+        window.addEventListener('load', init);
+    </script>
+    
+    <!-- Dodaj ARButton, aby umożliwić użytkownikowi wejście w tryb AR -->
+    <script src="https://threejs.org/examples/jsm/webxr/ARButton.js"></script>
 </body>
 </html>
