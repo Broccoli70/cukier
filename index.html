@@ -3,53 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebXR AR Example</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <title>WebXR Kostka</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+    </style>
+  <script type="module" crossorigin src="/cukier/assets/index-BOwiD3aA.js"></script>
 </head>
 <body>
-    <script>
-        // Zainicjuj scenę, kamerę i renderer
-        let scene, camera, renderer;
+    <!-- Div do renderowania Three.js -->
+    <div id="app"></div>
 
-        function init() {
-            // Tworzymy renderer obsługujący WebXR
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.xr.enabled = true; // Włącz obsługę WebXR
-            document.body.appendChild(renderer.domElement);
-
-            // Tworzymy scenę
-            scene = new THREE.Scene();
-
-            // Tworzymy kamerę perspektywiczną
-            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-            scene.add(camera);
-
-            // Dodajemy prosty obiekt (kostka)
-            const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1); // 10x10x10 cm
-            const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-            const cube = new THREE.Mesh(geometry, material);
-            cube.position.set(0, 0, -0.5); // Ustawienie kostki pół metra przed kamerą
-            scene.add(cube);
-
-            // Dodajemy oświetlenie
-            const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-            scene.add(light);
-
-            // Inicjujemy sesję AR
-            document.body.appendChild(ARButton.createButton(renderer));
-
-            // Rozpoczynamy animację
-            renderer.setAnimationLoop(() => {
-                renderer.render(scene, camera);
-            });
-        }
-
-        // Inicjujemy scenę po załadowaniu strony
-        window.addEventListener('load', init);
-    </script>
-    
-    <!-- Dodaj ARButton, aby umożliwić użytkownikowi wejście w tryb AR -->
-    <script src="https://threejs.org/examples/jsm/webxr/ARButton.js"></script>
 </body>
 </html>
