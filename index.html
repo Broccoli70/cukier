@@ -24,6 +24,7 @@
     }
 
     .text-container {
+      position: fixed;
       grid-area: 1/1/1/1;
       top: 0;
       left: 0;
@@ -33,14 +34,11 @@
       justify-content: space-between;
       padding: 4% 5%;
       color: white;
-      background-color: black;
     }
 
 
-    .text-container.footer {
-      grid-area: 1/1/1/1;
-      top: 0;
-      left: 0;
+    .text-container-footer {
+      grid-area: 5/1/6/1;
       z-index: 100;
       width: 100%;
       display: flex;
@@ -212,6 +210,8 @@
       flex-direction: column;
       height: auto;
       width: 100%;
+      z-index: 100;
+      background-color: white;
     }
     .simple-block.one {
       grid-area: 4/1/5/1;
@@ -219,8 +219,11 @@
     .simple-block.two {
       grid-area: 3/1/4/1;
     }
+    .simple-block.three {
+      grid-area: 5/1/6/1;
+    }
   </style>
-  <script type="module" crossorigin src="/assets/index-DvcpzwgA.js"></script>
+  <script type="module" crossorigin src="/cukier/assets/index-B9kPWdft.js"></script>
 </head>
 <body>
   <!-- Sekcja z wideo i pickerem -->
@@ -239,7 +242,7 @@
     <div class="test-header"><h1>COLOR:</h1></div>
     <div class="content">
       <video id="video" autoplay loop muted>
-        <source src="/assets/1_0-Cf3Zr3XL.mp4" type="video/mp4">
+        <source src="assets/1_0.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
 
@@ -256,33 +259,43 @@
     <div class="versions">
       <div class="version-item">
         <video id="video1" loop muted>
-          <source src="/assets/1_0-Cf3Zr3XL.mp4" type="video/mp4">
+          <source src="assets/1_0.mp4" type="video/mp4">
         </video>
         <button class="play-button" onclick="togglePlay('video1')">▶</button>
       </div>
       <div class="version-item">
         <video id="video2" loop muted>
-          <source src="/assets/1_0-Cf3Zr3XL.mp4" type="video/mp4">
+          <source src="assets/2_0.mp4" type="video/mp4">
         </video>
         <button class="play-button" onclick="togglePlay('video2')">▶</button>
       </div>
       <div class="version-item">
         <video id="video3" loop muted>
-          <source src="/assets/1_0-Cf3Zr3XL.mp4" type="video/mp4">
+          <source src="assets/3_0.mp4" type="video/mp4">
         </video>
         <button class="play-button" onclick="togglePlay('video3')">▶</button>
       </div>
       <div class="version-item">
         <video id="video4" loop muted>
-          <source src="/assets/1_0-Cf3Zr3XL.mp4" type="video/mp4">
+          <source src="assets/1_0.mp4" type="video/mp4">
         </video>
         <button class="play-button" onclick="togglePlay('video4')">▶</button>
       </div>
     </div>  
   </div>
 
+  <div class="simple-block three">
+    <div class="test-header"><h1>MOCKUP</h1></div>
+    <div class="content">
+      <video id="video" autoplay loop muted>
+        <source src="assets/mockup1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+<!-- 
   <div class="footer">
-    <div class="text-container footer">
+    <div class="text-container-footer">
       <div class="left-container">
         <p class="small">WOOKI.TM</p>
         <p class="large">OPUS</p>
@@ -292,10 +305,13 @@
         <p class="large">ANIMATION</p>
       </div>
     </div>
-  </div>
+  </div> -->
 
   </body>
   <!-- Skrypt do obsługi Tint i przycisków play -->
+
+
+
   <script>
     const colorOverlay = document.getElementById('color-overlay');
     const colorPicker = document.getElementById('color-picker');
